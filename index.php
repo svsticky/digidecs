@@ -55,9 +55,6 @@ if ( $header && $footer && $form && $confirm &&$form_header ) {
 					case "email":
 						echo alertMessage("Email-address niet geldig.");
 						break;
-					case "city":
-						echo alertMessage("Vul je woonplaats in.");
-						break;
 					case "date":
 						echo alertMessage("Datum moet in het formaat DD-MM-YYYY zijn");
 						break;
@@ -74,7 +71,7 @@ if ( $header && $footer && $form && $confirm &&$form_header ) {
 						echo alertMessage("Vul je rekeningnummer in");
 						break;
 					case "ticket":
-						echo alertMessage("Het bonnetje kan maximaal 2MB groot zijn. Alleen .pdf, .jpg, .gif en .png bestanden mogen worden geupload");
+						echo alertMessage("Het bonnetje kan maximaal 10MB groot zijn. Alleen .pdf, .jpg, .gif en .png bestanden mogen worden geupload");
 						break;
 					case "accept-tos":
 						echo alertMessage("Je moet alles eerst checken voordat je een declaratie kan doen.");
@@ -91,7 +88,7 @@ if ( $header && $footer && $form && $confirm &&$form_header ) {
 // Templates did not load correctly. Throw
 // error.
 else {
-	echo "505 internal server error.";
+	echo "<h1>505 internal server error.</h1>";
 	header("HTTP/1.1 500 Internal Server Error");
 	exit;
 }
@@ -107,7 +104,6 @@ function validateAll($post, $file) {
 	$validation_status = array(
 		"name"         => false,
 		"email"        => false,
-		"city"         => false,
 		"date"         => false,
 		"total-amount" => false,
 		"description"  => false,
@@ -129,7 +125,6 @@ function validateAll($post, $file) {
 	$validation_status['date']         = validateDate ($post['date']     );
 	$validation_status['total-amount'] = is_numeric($post['total-amount']);
 	$validation_status['name']         = !empty($post['name']            );
-	$validation_status['city']         = !empty($post['city']            );
 	$validation_status['description']  = !empty($post['description']     );
 	$validation_status['purpose']      = !empty($post['purpose']         );
 	$validation_status['bank-account'] = !empty($post['bank-account']    );
@@ -204,14 +199,13 @@ function handleSubmit($post, $file) {
 	$mail->FromName = $post['name'];
 	$mail->Subject  = EMAIL_SUBJECT_BASE;
 	$mail->Body     =
-		"Hoi Marit,\n\n" .
+		"Hoi Martijn,\n\n" .
 
 		"Ik heb zojuist het DigiDecs formulier ingevuld. " .
 		"Dit zijn mijn gegevens.\n\n" .
 
 		"Naam: {$post['name']}\n" .
 		"Email: {$post['email']}\n" .
-		"Woonplaats: {$post['city']}\n" .
 		"Datum aankoop: {$post['date']}\n" .
 		"Totaalbedrag: {$post['total-amount']}\n" .
 		"Wat: {$post['description']}\n" .
