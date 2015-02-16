@@ -11,7 +11,7 @@ define('EMAIL_SMTP_SERVER',  '');
 define('EMAIL_SUBJECT_BASE', '');
 
 // Define upload restrictions
-define('FILE_MAX_FILESIZE', 2000000);
+define('FILE_MAX_FILESIZE', 10000000);
 $allowed_filetypes  =
 	array('image/jpeg',
 				'image/jpg',
