@@ -88,7 +88,7 @@ if ( $header && $footer && $form && $confirm &&$form_header ) {
 // Templates did not load correctly. Throw
 // error.
 else {
-	echo "505 internal server error.";
+	echo "<h1>505 internal server error.</h1>";
 	header("HTTP/1.1 500 Internal Server Error");
 	exit;
 }
