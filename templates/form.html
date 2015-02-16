@@ -9,11 +9,6 @@
 			<input type="email" class="form-control" id="email" name="email" placeholder="gigantischebaas@stickyutrecht.nl" required>
 		</div>
 
-		<div class="form-group">
-			<label for="city">Woonplaats<sup>*</sup></label>
-			<input id="city" type="text" class="form-control" name="city" placeholder="Utrecht" required>
-		</div>
-
 		<div class="form-group date">
 			<label for="date">Datum aankoop<sup>*</sup></label>
 			<div class="input-group date">
@@ -21,7 +16,7 @@
 				<input id="date" name="date"type="text" class="form-control datepicker" data-date-format="dd-mm-yyyy" readonly required><span class="add-on"><i class="icon-th"></i></span>
 			</div>
 		</div>
-		
+
 		<div class="form-group">
 			<label for="total-amount">Totaalbedrag<sup>*</sup></label>
 			<div class="input-group">
@@ -47,7 +42,7 @@
 
 		<div class="form-group">
 			<label for="ticket">Bonnetje uploaden<sup>*</sup></label>
-			<input type="hidden" name="MAX_FILE_SIZE" value="2097152">
+			<input type="hidden" name="MAX_FILE_SIZE" value="10000000">
 			<input name="ticket" type="file" id="ticket" required>
 			<p class="help-block">Maximale grootte is 2MB. Alleen .pdf, .jpg, .gif en .png bestanden.</p>
 		</div>
@@ -56,7 +51,7 @@
 			<label for="remarks">Opmerkingen</label>
 			<textarea name="remarks" class="form-control" rows="3" type="textarea" id="remarks"></textarea>
 		</div>
-		
+
 		<div class="form-group">
 			<label for="accept-tos">
 				<input type="checkbox" name="accept-tos" id="accept-tos" required> Ik heb alles gecheckt en naar waarheid ingevuld<sup>*</sup>
