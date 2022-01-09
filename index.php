@@ -74,7 +74,7 @@ if ( $header && $footer && $form && $confirm &&$form_header ) {
 						break;
 					case "tickets":
 						$maxsize = (FILE_MAX_FILESIZE / 2**20) . "MB";
-						echo alertMessage("Elk bonnetje mag maximaal $maxsize groot zijn. Alleen .pdf, .png, en .jpg bestanden mogen worden geupload.");
+						echo alertMessage("Elk bonnetje kan maximaal $maxsize groot zijn. Alleen .pdf, .png, en .jpg bestanden mogen worden geupload.");
 						break;
 					case "accept-tos":
 						echo alertMessage("Je moet alles eerst checken voordat je een declaratie kan doen.");
