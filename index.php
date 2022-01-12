@@ -72,9 +72,9 @@ if ( $header && $footer && $form && $confirm &&$form_header ) {
 					case "bank-account":
 						echo alertMessage("Ongeldig rekeningnummer.");
 						break;
-					case "ticket":
+					case "tickets":
 						$maxsize = (FILE_MAX_FILESIZE / 2**20) . "MB";
-						echo alertMessage("Het bonnetje kan maximaal $maxsize groot zijn. Alleen .pdf, .png, en .jpg bestanden mogen worden geupload.");
+						echo alertMessage("Elk bonnetje kan maximaal $maxsize groot zijn. Alleen .pdf, .png, en .jpg bestanden mogen worden geupload.");
 						break;
 					case "accept-tos":
 						echo alertMessage("Je moet alles eerst checken voordat je een declaratie kan doen.");
@@ -100,7 +100,7 @@ if ( $header && $footer && $form && $confirm &&$form_header ) {
 // This function returns a key-value array
 // with bools that are used in creating the
 // error messages.
-function validateAll($post, $file) {
+function validateAll($post, $files) {
 	// Array that holds the validation status
 	// of each of the submitted values.
 	$validation_status = array(
@@ -111,7 +111,7 @@ function validateAll($post, $file) {
 		"purpose"      => false,
 		"bank-account" => false,
 		"remarks"      => true,
-		"ticket"       => false,
+		"tickets"      => false,
 		"accept-tos"   => false
 	);
 
@@ -128,7 +128,7 @@ function validateAll($post, $file) {
 	$validation_status['description']  = !empty($post['description']     );
 	$validation_status['purpose']      = !empty($post['purpose']         );
 	$validation_status['bank-account'] = validateIBAN($post['bank-account']);
-	$validation_status['ticket']       = validateTicket($file);
+	$validation_status['tickets']      = validateTickets($files);
 	$validation_status['accept-tos']   = $post['accept-tos'];
 
 	return $validation_status;
@@ -186,13 +186,21 @@ function validateEmail($email) {
 			&& preg_match('/@.+\./', $email);
 }
 
-// Validates wheter the uploaded file is of
+function validateTickets($files) {
+	$success = true;
+	for($i = 0; $i < count($files['name']); $i++) {
+		$success = $success && validateTicket($files, $i);
+	}
+	return $success;
+}
+
+// Validates whether the uploaded file is of
 // the correct type, size and has the correct
 // extension.
-function validateTicket($file) {
+function validateTicket($file, $index) {
 	// The ticket failed validation if there are
 	// any errors with it.
-	if ($file['error'] > 0) {
+	if ($file['error'][$index] > 0) {
 		return false;
 	}
 
@@ -205,7 +213,7 @@ function validateTicket($file) {
 	$mimetype = new finfo(FILEINFO_MIME_TYPE);
 	$extension = array_search(
         	$mimetype->file(
-			$file['tmp_name']),
+			$file['tmp_name'][$index]),
 		$allowed_filetypes,
         	true
     	);
@@ -220,7 +228,7 @@ function validateTicket($file) {
 	// A file is valid if it has an allowed extension,
 	// an allowed filetype and is less than or equal
 	// in size to the maximum filesize.
-	if($file['size'] <= FILE_MAX_FILESIZE ){
+	if($file['size'][$index] <= FILE_MAX_FILESIZE ){
 		return true;
 	}
 	return false;
@@ -245,7 +253,7 @@ function alertMessage($string) {
 // Logic to handle a successfull submit.
 // An email get's send to the treasurer
 // with the ticket attached.
-function handleSubmit($post, $file) {
+function handleSubmit($post, $files) {
 	// Build the message body
 	$treasurer = EMAIL_FIRST_NAME;
 	$mail_body      =
@@ -266,21 +274,24 @@ function handleSubmit($post, $file) {
 
 		"{$post['name']}";
 
-	// Rename the file
+	// Rename the files for sending
         global $allowed_filetypes;
 
-        // Check the mime type from the file itself
-        $mimetype = new finfo(FILEINFO_MIME_TYPE);
-        $extension = array_search(
-                $mimetype->file(
-                        $file['tmp_name']),
-                $allowed_filetypes,
-                true
-        );
+	$file_names = [];
+	for($i = 0; $i < count($files['name']); $i++) {
+		// Check the mime type from the file itself
+		$mimetype = new finfo(FILEINFO_MIME_TYPE);
+		$extension = array_search(
+			$mimetype->file(
+				$files['tmp_name'][$i]),
+			$allowed_filetypes,
+			true
+		);
 
-
-	$file_name = $file['tmp_name'] . '.' . $extension;
-	rename( $file['tmp_name'], $file_name );
+		$file_name = $files['tmp_name'][$i] . '.' . $extension;
+		rename( $files['tmp_name'][$i], $file_name );
+		$file_names[] = $file_name;
+	}
 
 	// Create new Mailgun mailer instance and
 	// configure the class for sending
@@ -295,7 +306,6 @@ function handleSubmit($post, $file) {
 			'o:tag'         => array('digidecs'),
 			'text'          => $mail_body
 		),
-		array(
-			'attachment'    => array( $file_name ))
-		);
+		array(  'attachment'    => $file_names
+		));
 }
