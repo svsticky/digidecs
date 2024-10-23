@@ -7,7 +7,6 @@ const NL: Locale = {
     title: "DigiDecs",
     subtitle: "Digitaal declareren bij Sticky",
     invalidFieldsError: "Een of meerdere velden zijn onjuist ingevuld",
-    success: "Success! Je declaratie is ingestuurd. Mocht je na 5 werkdagen je geldf nog niet hebben ontvangen, neem dan contact op met de Penningmeester: penningmeester@svsticky.nl.",
     form: {
       name: "Naam",
       iban: "IBAN",
@@ -16,7 +15,7 @@ const NL: Locale = {
       what: "Wat",
       commission: "Waarvoor / Welke commissie",
       notes: "Opmerkingen",
-      files: "Bonnetjes",
+      files: "Bonnetjes / Facturen",
       filesExplanation: "Alleen .pdf, .jpg, en .png bestanden, je kan meerdere bestanden selecteren. Zorg dat de datum, het (btw) bedrag en de verschillende producten of diensten goed leesbaar zijn.",
       checked: "Ik heb alles gecheckt en naar waarheid ingevuld",
       rules: {
@@ -36,6 +35,10 @@ const NL: Locale = {
       }
     },
     submit: "Verstuur"
+  },
+  submitted: {
+    title: "Succes!",
+    description: "Jouw digidecs is verstuurd! Mocht je na 7 dagen je geld nog niet terug hebben gekregen, neem dan contact op met de penningmeester"
   }
 }
 

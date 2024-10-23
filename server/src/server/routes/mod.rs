@@ -8,8 +8,6 @@ pub struct Router;
 
 impl Routable for Router {
     fn configure(config: &mut ServiceConfig) {
-        config.service(web::scope("/api")
-            .route("/digidecs", web::post().to(digidecs::digidecs))
-        );
+        config.service(web::scope("/api").configure(digidecs::Router::configure));
     }
 }

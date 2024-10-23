@@ -1,11 +1,14 @@
 export interface Locale {
   site_title: string,
   error: string,
+  submitted: {
+    title: string,
+    description: string
+  },
   home: {
     title: string,
     subtitle: string,
     invalidFieldsError: string,
-    success: string,
     form: {
       name: string,
       iban: string,

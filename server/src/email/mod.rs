@@ -1,18 +1,19 @@
 use crate::file::SmtpConfig;
+use lettre::message::header::ContentType;
 use lettre::message::{Mailbox, MultiPart, SinglePart};
 use lettre::transport::smtp::client::{AsyncSmtpConnection, TlsParameters};
 use lettre::transport::smtp::extension::ClientId;
 use lettre::Address;
 use lettre::Message;
+use rand::Rng;
 use std::net::{IpAddr, Ipv4Addr};
 use std::str::FromStr;
 use std::time::Duration;
-use lettre::message::header::ContentType;
 use thiserror::Error;
 use tracing::{debug, error, trace};
 
-pub mod template;
 pub mod ipv4;
+pub mod template;
 
 #[derive(Debug, Error)]
 pub enum SendError {
@@ -53,23 +54,28 @@ pub async fn send_email(
         Address::from_str(&smtp_config.from_email)?,
     );
 
-    let mb_reply_to = Mailbox::new(
-        Some(reply_to_name),
-        Address::from_str(&reply_to_email)?,
-    );
+    let mb_reply_to = Mailbox::new(Some(reply_to_name), Address::from_str(&reply_to_email)?);
 
     let msg = Message::builder()
         .reply_to(mb_reply_to)
         .from(mb_from)
         .to(mb_to)
-        .subject(format!("[DigiDecs] Nieuwe declaratie: {commission}"));
+        .subject(format!(
+            "[DigiDecs] Nieuwe declaratie: {commission} ({})",
+            rand::thread_rng()
+                .sample_iter(rand::distributions::Alphanumeric)
+                .take(6)
+                .map(char::from)
+                .collect::<String>()
+        ));
 
     let mut mp = MultiPart::mixed().build();
     mp = mp.singlepart(SinglePart::html(body));
 
     for att in attachments {
-        mp = mp.singlepart(lettre::message::Attachment::new(att.name)
-            .body(att.content, ContentType::parse(&att.mime)?)
+        mp = mp.singlepart(
+            lettre::message::Attachment::new(att.name)
+                .body(att.content, ContentType::parse(&att.mime)?),
         );
     }
 
@@ -88,14 +94,14 @@ pub async fn send_email(
         None,
         Some(IpAddr::V4(local_addr4)),
     )
-        .await?;
+    .await?;
 
     if conn.can_starttls() {
         conn.starttls(
             TlsParameters::new_rustls(smtp_config.smtp_relay.as_str().into())?,
             &client_id,
         )
-            .await?;
+        .await?;
     }
 
     trace!("Checking SMTP connection");

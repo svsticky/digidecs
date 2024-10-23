@@ -1,0 +1,53 @@
+name: test
+on:
+  push: {}
+
+jobs:
+  server-fmt:
+    runs-on: ubuntu-latest
+    steps: 
+    - uses: actions/checkout@v3
+    - run: rustup toolchain install stable --profile minimal
+    - run: rustup component add rustfmt
+    - uses: Swatinem/rust-cache@v2.7.0
+      with:
+        workspaces: "server"
+        save-if: ${{ github.ref == 'refs/heads/master' }}
+    - run: cargo fmt --all --check
+      working-directory: server
+  
+  server-test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - run: rustup toolchain install stable --profile minimal
+    - uses: Swatinem/rust-cache@v2.7.0
+      with:
+        workspaces: "server"
+        save-if: ${{ github.ref == 'refs/heads/master' }}
+    - run: cargo test
+      working-directory: server
+
+  server-clippy:
+    runs-on: ubuntu-latest
+    steps: 
+    - uses: actions/checkout@v3
+    - run: rustup toolchain install stable --profile minimal
+    - run: rustup component add clippy
+    - uses: Swatinem/rust-cache@v2.7.0
+      with:
+        workspaces: "server"
+        save-if: ${{ github.ref == 'refs/heads/master' }}
+    - run: cargo clippy
+      working-directory: server
+
+  frontend-eslint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Install modules
+      working-directory: frontend
+      run: yarn
+    - name: Run eslint
+      working-directory: frontend
+      run: yarn eslint

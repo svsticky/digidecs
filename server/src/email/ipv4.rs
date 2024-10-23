@@ -22,16 +22,16 @@ pub async fn get_local_v4() -> color_eyre::Result<Ipv4Addr> {
                 80,
             ))),
         )
-            .await
+        .await
         {
             Ok(stream_r) => stream_r.map(|_| addr),
             Err(e) => Err(std::io::Error::new(std::io::ErrorKind::TimedOut, e)),
         }
     }))
-        .await
-        .into_iter()
-        .flatten()
-        .collect::<Vec<_>>();
+    .await
+    .into_iter()
+    .flatten()
+    .collect::<Vec<_>>();
 
     if connectable_addrs.is_empty() {
         Err(color_eyre::eyre::Error::msg(

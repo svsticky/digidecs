@@ -14,12 +14,18 @@ pub enum Error {
     InvalidIban,
     #[error("Invalid Email address")]
     InvalidEmail,
-    #[error("At least one attachment is required")]
+    #[error("Missing attachments")]
     MissingAttachment,
     #[error("Value may not be negative or zero")]
     ValueNegativeOrZero,
     #[error("Attachment contains invalid base64")]
     InvalidAttachmentBase64(#[from] base64::DecodeError),
+    #[error("No digidecs with that tracking ID exists")]
+    UnknownTrackingId,
+    #[error("No digidecs attachment with that tracking ID exists")]
+    UnknownAttachmentTrackingId,
+    #[error("Digidecs has expired. Start over again")]
+    DigidecsExpired,
 }
 
 impl ResponseError for Error {
@@ -32,6 +38,9 @@ impl ResponseError for Error {
             Self::MissingAttachment => StatusCode::BAD_REQUEST,
             Self::ValueNegativeOrZero => StatusCode::BAD_REQUEST,
             Self::InvalidAttachmentBase64(_) => StatusCode::BAD_REQUEST,
+            Self::UnknownTrackingId => StatusCode::NOT_FOUND,
+            Self::UnknownAttachmentTrackingId => StatusCode::NOT_FOUND,
+            Self::DigidecsExpired => StatusCode::BAD_REQUEST,
         }
     }
 }

@@ -1,5 +1,5 @@
 [package]
-name = "server"
+name = "digidecs"
 version = "0.1.0"
 edition = "2021"
 
@@ -25,3 +25,5 @@ iban_validate = "4.0.1"
 tracing-subscriber = { version = "0.3.18", features = ["env-filter"] }
 tracing-error = "0.2.0"
 base64 = "0.22.1"
+rand = "0.8.5"
+time = "0.3.36"

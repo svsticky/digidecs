@@ -14,9 +14,7 @@ pub struct TemplateData {
     pub notes: Option<String>,
 }
 
-pub fn render_template(
-    data: &TemplateData,
-) -> Result<String, RenderError> {
+pub fn render_template(data: &TemplateData) -> Result<String, RenderError> {
     let mut engine = Handlebars::new();
     engine.set_strict_mode(true);
 

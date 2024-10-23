@@ -78,9 +78,9 @@
             size
           />
 
-          <v-card-subtitle class="mt-0 mb-3">
+          <p class="mt-0 mb-3 text-grey">
             {{ $t('home.form.filesExplanation') }}
-          </v-card-subtitle>
+          </p>
 
           <v-textarea
             v-model="form.notes"
@@ -123,7 +123,6 @@ import MaterialBanner from "@/views/components/MaterialBanner.vue";
 
 interface Data {
   error: string | null,
-  success: string | null,
   loading: boolean,
   form: {
     valid: boolean,
@@ -151,7 +150,6 @@ export default defineComponent({
   data(): Data {
     return {
       error: null,
-      success: null,
       loading: false,
       form: this.emptyForm(),
       rules: {
@@ -201,7 +199,8 @@ export default defineComponent({
       }
 
       this.loading = true;
-      const r = await Digidecs.digidecs(
+      console.log("Digidecs upload started");
+      const r = await Digidecs.start(
         this.form.name,
         this.form.iban,
         this.form.email,
@@ -211,18 +210,39 @@ export default defineComponent({
         this.form.notes,
         this.form.files
       );
-      this.loading = false;
 
       if(r.isErr()) {
-        this.error = this.$t('error');
-      } else {
-        this.success = this.$t('home.succcess');
-        this.form = this.emptyForm();
+        this.displayError();
+        return;
       }
 
-      window.scroll({
-        top: 0
-      });
+      const digidecs = r.unwrap();
+      for(let i = 0; i < this.form.files.length; i++) {
+        console.log(`Uploading file ${i + 1}/${this.form.files.length}`);
+
+        const r1 = await digidecs.upload_attachment(this.form.files[i], i);
+        if(r1.isErr()) {
+          this.displayError();
+          return;
+        }
+      }
+
+      console.log("Digidecs upload complete");
+      const r1 = await digidecs.complete();
+      if(r1.isErr()) {
+        this.displayError();
+        return;
+      }
+
+      this.loading = false;
+      this.form = this.emptyForm();
+
+      this.$router.push('/complete');
+    },
+
+    displayError() {
+      this.error = this.$t('error');
+      this.loading = false;
     },
 
     emptyForm() {

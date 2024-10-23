@@ -1,11 +1,11 @@
-use serde::{Deserialize, Serialize};
 use crate::file::DataFile;
+use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Default, Clone, Deserialize, Serialize)]
 pub struct AppConfig {
     pub server: ServerConfig,
     pub smtp: SmtpConfig,
-    pub treasurer_email: String
+    pub treasurer_email: String,
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]

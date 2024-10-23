@@ -8,6 +8,10 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: '',
         component: () => import('@/views/HomeView.vue')
+      },
+      {
+        path: 'complete',
+        component: () => import('@/views/SubmittedView.vue')
       }
     ]
   }
