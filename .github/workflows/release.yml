@@ -1,0 +1,83 @@
+name: release
+on:
+  push: 
+    tags:
+    - '**'
+
+jobs:
+  build-server-musl:
+    name: build-server-musl
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - run: rustup toolchain install stable --profile minimal
+    - run: rustup target add x86_64-unknown-linux-musl --toolchain stable
+    - run: sudo apt install gcc musl-tools cmake clang
+    - uses: Swatinem/rust-cache@v2.7.0
+      with:
+        workspaces: "server"
+        save-if: ${{ github.ref == 'refs/heads/master' }}
+    - run: cargo build --release --target x86_64-unknown-linux-musl
+      working-directory: server
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: server-x86_64-unknown-linux-musl
+        path: ./server/target/x86_64-unknown-linux-musl/release/digidecs
+
+  build-frontend:
+    name: build-frontend
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set Node.js 21
+      uses: actions/setup-node@v3
+      with:
+        node-version: 21.x
+    - name: Run install
+      uses: borales/actions-yarn@v4
+      with:
+        dir: frontend
+        cmd: install
+    - name: Build
+      uses: borales/actions-yarn@v4
+      with:
+        dir: frontend
+        cmd: build
+    - run: tar -czf frontend.tar.gz dist/*
+      working-directory: frontend
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: frontend.tar.gz
+        path: ./frontend/frontend.tar.gz
+
+
+  create-release:
+    name: create-release
+    needs:
+    - build-server-musl
+    - build-frontend
+    runs-on: ubuntu-latest
+    steps:
+    - name: Download all workflow run artifacts
+      uses: actions/download-artifact@v3
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@latest
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        draft: false
+    
+    - run: mv server-x86_64-unknown-linux-musl/digidecs server-x86_64-unknown-linux-musl/server-x86_64-unknown-linux-musl
+
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          server-x86_64-unknown-linux-musl/server-x86_64-unknown-linux-musl
+          frontend.tar.gz/frontend.tar.gz
