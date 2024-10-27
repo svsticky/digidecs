@@ -6,7 +6,7 @@
       icon="mdi-alert-outline"
       title="Error"
       type="error"
-      @close="error = null"
+      @close="error = undefined"
     />
 
     <v-card
@@ -122,7 +122,7 @@ import {Digidecs} from "@/scripts/digidecs";
 import MaterialBanner from "@/views/components/MaterialBanner.vue";
 
 interface Data {
-  error: string | null,
+  error: string | undefined,
   loading: boolean,
   form: {
     valid: boolean,
@@ -149,7 +149,7 @@ export default defineComponent({
   components: {MaterialBanner},
   data(): Data {
     return {
-      error: null,
+      error: undefined,
       loading: false,
       form: this.emptyForm(),
       rules: {

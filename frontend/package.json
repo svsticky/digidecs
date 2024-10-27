@@ -35,6 +35,6 @@
     "unplugin-fonts": "^1.0.3",
     "vite": "^4.2.0",
     "vite-plugin-vuetify": "^1.0.0",
-    "vue-tsc": "^1.2.0"
+    "vue-tsc": "^2.1.8"
   }
 }

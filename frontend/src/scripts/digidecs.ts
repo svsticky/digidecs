@@ -20,7 +20,7 @@ export class Digidecs {
     value: number,
     what: string,
     commission: string,
-    notes: string,
+    notes: string | null,
     attachments: File[],
   ): Promise<Result<Digidecs, ApiError>> {
     const r = await fetch1(`${server}/api/digidecs/start`, {
