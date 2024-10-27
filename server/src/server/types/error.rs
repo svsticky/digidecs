@@ -1,3 +1,4 @@
+use actix_web::body::BodyLimitExceeded;
 use actix_web::http::StatusCode;
 use actix_web::ResponseError;
 use thiserror::Error;
@@ -26,6 +27,10 @@ pub enum Error {
     UnknownAttachmentTrackingId,
     #[error("Digidecs has expired. Start over again")]
     DigidecsExpired,
+    #[error(transparent)]
+    BodyTooLarge(#[from] BodyLimitExceeded),
+    #[error(transparent)]
+    Actix(#[from] actix_web::Error),
 }
 
 impl ResponseError for Error {
@@ -41,6 +46,8 @@ impl ResponseError for Error {
             Self::UnknownTrackingId => StatusCode::NOT_FOUND,
             Self::UnknownAttachmentTrackingId => StatusCode::NOT_FOUND,
             Self::DigidecsExpired => StatusCode::BAD_REQUEST,
+            Self::BodyTooLarge(_) => StatusCode::PAYLOAD_TOO_LARGE,
+            Self::Actix(_) => StatusCode::INTERNAL_SERVER_ERROR,
         }
     }
 }
