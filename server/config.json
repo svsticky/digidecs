@@ -1,0 +1,12 @@
+{
+  "server": {
+    "port": 8080,
+    "domain": "digidecs.local"
+  },
+  "smtp": {
+    "from_email": "digidecs@svsticky.nl",
+    "from_name": "Sticky Digidecs",
+    "smtp_relay": "smtp-relay.gmail.com"
+  },
+  "treasurer_email": "penningmeester@svsticky.nl"
+}
