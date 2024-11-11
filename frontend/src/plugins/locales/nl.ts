@@ -28,7 +28,7 @@ const NL: Locale = {
       hints: {
         name: "Penningmeester",
         email: "{'eindbaas@svsticky.nl'}",
-        iban: "NL13TEST0123456789",
+        iban: "GB94BARC10201530093459",
         value: "19,19",
         what: "Graafmachine",
         commission: "Bestuur, lul!"
