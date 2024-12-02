@@ -213,7 +213,7 @@ export default defineComponent({
         this.form.name,
         this.form.iban,
         this.form.email,
-        Number.parseFloat(this.form.value),
+        Number.parseFloat(this.form.value.replaceAll(",",".")),
         this.form.what,
         this.form.commission,
         this.form.notes,
