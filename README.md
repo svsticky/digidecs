@@ -3,7 +3,6 @@ Digidecs is the online form for committee- and board members to submit their rec
 
 # Prerequesites
 - [Yarn](https://classic.yarnpkg.com/en/)
-- [Vue](https://vuejs.org/)
 - [Rust](https://www.rust-lang.org/)
 
 # Local Installation
