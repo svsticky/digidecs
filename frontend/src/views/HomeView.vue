@@ -146,16 +146,16 @@ interface Data {
 }
 
 function checkIBAN(iban: string): boolean {  
-  if (!/([a-zA-Z]{2}[0-9]{2})([a-zA-Z]{4}[0-9]{10})/.test(iban)){ // Check if the general format is OK
-    return false;
-  }
-  const numericIban = (iban.slice(4) + iban.slice(0, 4))
-    .replace(/[A-Z]/g, char => (char.charCodeAt(0) - 55).toString()); // 11-test
-  const remainder = numericIban
-    .split('')
-    .map((acc, digit) => (Number.parseInt(acc), digit))
-    .reduce((acc, digit) => (acc + digit) % 97, 0);
-  return remainder === 1;
+  return /([a-zA-Z]{2}[0-9]{2})([a-zA-Z]{4}[0-9]{10})/.test(iban);
+  
+  // TODO broken
+  // const numericIban = (iban.slice(4) + iban.slice(0, 4))
+  //   .replace(/[A-Z]/g, char => (char.charCodeAt(0) - 55).toString()); // 11-test
+  // const remainder = numericIban
+  //   .split('')
+  //   .map((acc, digit) => (Number.parseInt(acc), digit))
+  //   .reduce((acc, digit) => (acc + digit) % 97, 0);
+  // return remainder === 1;
 }
 
 export default defineComponent({
