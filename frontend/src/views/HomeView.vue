@@ -146,8 +146,8 @@ interface Data {
 }
 
 function checkIBAN(iban: string): boolean {  
-  return /([a-zA-Z]{2}[0-9]{2})([a-zA-Z]{4}[0-9]{10})/.test(iban);
-  
+  return /^([a-zA-Z]{2}[0-9]{2})([a-zA-Z]{4}[0-9]{10})$/.test(iban);
+
   // TODO broken
   // const numericIban = (iban.slice(4) + iban.slice(0, 4))
   //   .replace(/[A-Z]/g, char => (char.charCodeAt(0) - 55).toString()); // 11-test
