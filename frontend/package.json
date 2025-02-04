@@ -42,5 +42,10 @@
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^3.0.5",
     "vue-tsc": "^2.1.8"
+  },
+  "husky": {
+    "hooks": { 
+      "pre-commit": "echo \"[Husky] pre-commit\"",
+    }
   }
 }
