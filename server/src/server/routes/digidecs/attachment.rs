@@ -21,7 +21,8 @@ pub async fn attachment(
 
     trace!("Received new attachment ({} B)", payload.len());
 
-    let mut lock = runtime.pending_digidecs.lock().unwrap();
+    let mut lock = runtime.pending_digidecs.lock().await;
+
     let digidecs = lock
         .iter_mut()
         .find(|digidecs| digidecs.tracking_id.eq(&query.tracking_id))
