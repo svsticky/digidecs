@@ -10,7 +10,8 @@ use time::{Duration, OffsetDateTime};
 use tracing::instrument;
 
 use crate::server::types::{
-    Error, PendingDigidecs, PendingDigidecsAttachment, PendingDigidecsData, WResult, WRuntime,
+    Error, Locale, PendingDigidecs, PendingDigidecsAttachment, PendingDigidecsData, WResult,
+    WRuntime,
 };
 
 #[derive(Deserialize)]
@@ -23,6 +24,7 @@ pub struct StartDigidecsRequest {
     commission: String,
     notes: Option<String>,
     attachments: Vec<Attachment>,
+    locale: Locale,
 }
 
 #[derive(Deserialize)]
@@ -78,7 +80,8 @@ pub async fn start(
         })
         .collect::<Vec<_>>();
 
-    let mut lock = runtime.pending_digidecs.lock().unwrap();
+    let mut lock = runtime.pending_digidecs.lock().await;
+
     lock.push(PendingDigidecs {
         expires_at: OffsetDateTime::now_utc() + Duration::hours(1),
         tracking_id: tracking_id.clone(),
@@ -100,6 +103,7 @@ pub async fn start(
             notes: payload.notes,
             what: payload.what,
             commission: payload.commission,
+            locale: payload.locale,
         },
     });
 

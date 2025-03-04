@@ -1,0 +1,23 @@
+<html lang="nl">
+{{> header }}
+<body>
+<div class="container">
+    <div class="content">
+        <h3 class="banner">Nieuwe DigiDecs voor {{ commission }}</h3>
+
+        <p>
+            Naam: {{ name }} <br/>
+            Email: {{ email }} <br/>
+            Totaalbedrag: {{ value }} <br/>
+            Wat: {{ what }} <br/>
+            Waarvoor: {{ commission }} <br/>
+            Rekeningnummer: {{ iban }} <br/>
+            {{#if notes }}
+            Opmerkingen:<br/>
+            {{ notes }}
+            {{/if}}
+        </p>
+    </div>
+</div>
+</body>
+</html>

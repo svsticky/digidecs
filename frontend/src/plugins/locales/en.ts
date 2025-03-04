@@ -8,7 +8,7 @@ const EN: Locale = {
     subtitle: "Declare digitally at Sticky",
     invalidFieldsError: "One or multiple fields are incorreect",
     form: {
-      name: "Naam",
+      name: "Name",
       iban: "IBAN",
       email: "Email",
       value: "Amount",

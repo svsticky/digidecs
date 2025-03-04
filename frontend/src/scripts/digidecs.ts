@@ -3,6 +3,19 @@ import {ApiError} from "@/scripts/core/error";
 import {fetch1} from "@/scripts/core/fetch1";
 import {server} from "@/main";
 
+export enum DigidecsLocale {
+  NL,
+  EN,
+}
+
+export namespace DigidecsLocale {
+  export function serverName(locale: DigidecsLocale): string {
+    switch(locale) {
+      case DigidecsLocale.EN: return "En"
+      case DigidecsLocale.NL: return "Nl"
+    }
+  }
+}
 
 export class Digidecs {
   trackingId: string;
@@ -22,6 +35,7 @@ export class Digidecs {
     commission: string,
     notes: string | null,
     attachments: File[],
+    locale: Locale,
   ): Promise<Result<Digidecs, ApiError>> {
     const r = await fetch1(`${server}/api/digidecs/start`, {
       method: 'POST',
@@ -36,6 +50,7 @@ export class Digidecs {
         what: what,
         commission: commission,
         notes: notes,
+        locale: DigidecsLocale.serverName(locale),
         attachments: attachments.map((att) => {
           return {
             name: att.name,
@@ -89,6 +104,4 @@ export class Digidecs {
       return Result.err(r.unwrapErr());
     }
   }
-  
-  
 }

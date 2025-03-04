@@ -20,6 +20,9 @@ export default [
         sourceType: 'module',
       },
     },
+    rules: {
+      "@typescript-eslint/no-namespace": "off"
+    }
   },
   {
     ignores: [

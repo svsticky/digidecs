@@ -6,7 +6,7 @@ use actix_cors::Cors;
 use actix_route_config::Routable;
 use actix_web::{App, HttpServer};
 use noiseless_tracing_actix_web::NoiselessRootSpanBuilder;
-use std::sync::{Arc, Mutex};
+use std::sync::Arc;
 use tracing::info;
 
 mod routes;
@@ -17,7 +17,7 @@ pub async fn run_server(config: AppConfig, args: AppArgs) -> color_eyre::Result<
 
     let runtime_data = RuntimeData {
         local_v4_addr: get_local_v4().await?,
-        pending_digidecs: Arc::new(Mutex::new(vec![])),
+        pending_digidecs: Arc::new(tokio::sync::Mutex::new(vec![])),
     };
 
     info!("Using {} for SMTP connections", runtime_data.local_v4_addr);

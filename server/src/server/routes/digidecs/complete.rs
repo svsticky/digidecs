@@ -1,6 +1,6 @@
-use crate::email::send_email;
-use crate::email::template::{render_template, TemplateData};
-use crate::server::types::{Empty, Error, WArgs, WConfig, WResult, WRuntime};
+use crate::email::template::{render_submitter, render_treasurer, SubmitterData, TreasurerData};
+use crate::email::{send_submitter_email, send_treasurer_email, EmailLanguage, TreasurerEmailData};
+use crate::server::types::{Empty, Error, Locale, WArgs, WConfig, WResult, WRuntime};
 use actix_web::web;
 use serde::Deserialize;
 use time::OffsetDateTime;
@@ -18,7 +18,7 @@ pub async fn complete(
     runtime: WRuntime,
     args: WArgs,
 ) -> WResult<Empty> {
-    let mut lock = runtime.pending_digidecs.lock().unwrap();
+    let mut lock = runtime.pending_digidecs.lock().await;
     let (idx, _) = lock
         .iter()
         .enumerate()
@@ -41,7 +41,7 @@ pub async fn complete(
         return Err(Error::MissingAttachment);
     }
 
-    let email_body = render_template(&TemplateData {
+    let treasurer = render_treasurer(&TreasurerData {
         name: digidecs.data.name.clone(),
         iban: digidecs.data.iban.clone(),
         email: digidecs.data.email.clone(),
@@ -50,6 +50,20 @@ pub async fn complete(
         commission: digidecs.data.commission.clone(),
         notes: digidecs.data.notes.clone(),
     })?;
+
+    let submitter = render_submitter(
+        &SubmitterData {
+            first_name: digidecs
+                .data
+                .name
+                .split(" ")
+                .collect::<Vec<_>>()
+                .first()
+                .map(|s| s.to_string())
+                .unwrap_or(digidecs.data.name.clone()),
+        },
+        &map_locale_to_email_lang(&digidecs.data.locale),
+    )?;
 
     let attachments = digidecs
         .attachments
@@ -63,21 +77,42 @@ pub async fn complete(
 
     if args.dry_run {
         info!("Dry run is enabled. Not sending email.");
-        info!("Email body: \n{email_body}");
+        info!("Email body to treasurer: \n{treasurer}");
+        info!("Email body to submitter: \n{submitter}");
     } else {
-        trace!("Sending Digidecs email");
-        send_email(
+        trace!("Sending Digidecs email to treasurer");
+        send_treasurer_email(
             &config.smtp,
             runtime.local_v4_addr,
-            &config.treasurer_email,
-            email_body,
-            digidecs.data.name.clone(),
-            &digidecs.data.email.clone(),
-            &digidecs.data.what.clone(),
-            attachments,
+            TreasurerEmailData {
+                to: &config.treasurer_email,
+                body: &treasurer,
+                reply_to_name: &digidecs.data.name,
+                reply_to_email: &digidecs.data.email,
+                commission: &digidecs.data.what.clone(),
+                attachments,
+            },
+        )
+        .await?;
+
+        trace!("Sending DigiDecs email to submitter");
+        send_submitter_email(
+            &config.smtp,
+            runtime.local_v4_addr,
+            &digidecs.data.email,
+            submitter,
+            &digidecs.data.name,
+            &map_locale_to_email_lang(&digidecs.data.locale),
         )
         .await?;
     }
 
     Ok(Empty)
+}
+
+fn map_locale_to_email_lang(locale: &Locale) -> EmailLanguage {
+    match locale {
+        Locale::En => EmailLanguage::En,
+        Locale::Nl => EmailLanguage::Nl,
+    }
 }
