@@ -118,7 +118,7 @@
 
 import {defineComponent} from "vue";
 import {InputValidationRules} from "@/main";
-import {Digidecs} from "@/scripts/digidecs";
+import {Digidecs, DigidecsLocale} from "@/scripts/digidecs";
 import MaterialBanner from "@/views/components/MaterialBanner.vue";
 
 interface Data {
@@ -230,7 +230,8 @@ export default defineComponent({
         this.form.what,
         this.form.commission,
         this.form.notes,
-        this.form.files
+        this.form.files,
+        this.getCurrentLocale(),
       );
 
       if(r.isErr()) {
@@ -261,7 +262,14 @@ export default defineComponent({
 
       this.$router.push('/complete');
     },
-
+    getCurrentLocale(): DigidecsLocale {
+      const currentLocale = this.$i18n.locale;
+      switch(currentLocale) {
+        case "nl": return DigidecsLocale.NL;
+        case "en-US": return DigidecsLocale.EN;
+        default: return DigidecsLocale.NL;
+      }
+    },
     displayError() {
       this.error = this.$t('error');
       this.loading = false;
