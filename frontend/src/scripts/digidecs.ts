@@ -35,7 +35,7 @@ export class Digidecs {
     commission: string,
     notes: string | null,
     attachments: File[],
-    locale: Locale,
+    locale: DigidecsLocale,
   ): Promise<Result<Digidecs, ApiError>> {
     const r = await fetch1(`${server}/api/digidecs/start`, {
       method: 'POST',
