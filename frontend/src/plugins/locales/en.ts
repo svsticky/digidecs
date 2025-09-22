@@ -29,7 +29,7 @@ const EN: Locale = {
         name: "Treasurer",
         email: "{'eindbaas@svsticky.nl'}",
         iban: "GB94BARC10201530093459",
-        value: "19,19",
+        value: "20,20",
         what: "Digging Machine",
         commission: "The board, obviously!"
       }
