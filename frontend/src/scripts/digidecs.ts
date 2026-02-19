@@ -44,7 +44,7 @@ export class Digidecs {
       },
       body: JSON.stringify({
         name: name,
-        iban: iban,
+        iban: iban.replaceAll(" ", ""),
         email: email,
         value: value,
         what: what,
