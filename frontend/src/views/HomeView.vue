@@ -151,7 +151,7 @@ function checkIBAN(iban: string): boolean {
   // GB94BARC10201530093459 (correct)
   // gB94BARC10201530093459 (correct, evaluates to its uppercase equivalent)
   // GB94BARC20201530093459 (incorrect checksum)
-  iban = iban.toUpperCase();
+  iban = iban.toUpperCase().replaceAll(" ", "");
   const ibanRegex = /^[A-Z]{2}[0-9]{2}[A-Z0-9]{1,30}$/;
   if (!ibanRegex.test(iban)) {
     return false;
