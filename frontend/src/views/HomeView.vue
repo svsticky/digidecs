@@ -76,7 +76,8 @@
           />
 
           <v-file-input
-            v-model="form.files"
+            :model-value="form.files"
+            @update:modelValue="onFilesChange"
             color="primary"
             :label="$t('home.form.files')"
             :rules="rules.files"
@@ -222,8 +223,12 @@ export default defineComponent({
     }
   },
   methods: {
-    async submit() {
+    onFilesChange(newFiles: File[] | File) {
+      const incoming = Array.isArray(newFiles) ? newFiles : [newFiles]
+      this.form.files = [...this.form.files, ...incoming]
+    },
 
+    async submit() {
       if(!this.form.checked || this.form.files.length == 0) {
         this.error = this.$t("home.invalidFieldsError");
         window.scroll({
