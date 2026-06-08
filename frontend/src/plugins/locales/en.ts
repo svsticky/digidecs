@@ -11,6 +11,7 @@ const EN: Locale = {
       name: "Name",
       iban: "IBAN",
       email: "Email",
+      address: "Address",
       value: "Amount",
       what: "What",
       commission: "For what / which commission",
@@ -22,12 +23,14 @@ const EN: Locale = {
         required: "Required",
         ibanInvalid: "Invalid IBAN",
         emailInvalid: "Invalid email address",
+        addressInvalid: "Invalid address",
         valueInvalid: "Invalid amount",
         filesTooLarge: "The maximum file size is 15MB"
       },
       hints: {
         name: "Treasurer",
         email: "{'eindbaas@svsticky.nl'}",
+        address: "Drieharingstraat 22, 3511 BJ Utrecht",
         iban: "GB94BARC10201530093459",
         value: "20,20",
         what: "Digging Machine",

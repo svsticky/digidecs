@@ -11,6 +11,7 @@ const NL: Locale = {
       name: "Naam",
       iban: "IBAN",
       email: "Email",
+      address: "Address",
       value: "Bedrag",
       what: "Wat",
       commission: "Waarvoor / Welke commissie",
@@ -22,12 +23,14 @@ const NL: Locale = {
         required: "Vereist",
         ibanInvalid: "Ongeldig IBAN",
         emailInvalid: "Ongeldig email adres",
+        addressInvalid: "Ongeldig adres",
         valueInvalid: "Ongeldig bedrag",
         filesTooLarge: "De maximale totale bestandsgrote is 15MB."
       },
       hints: {
         name: "Penningmeester",
         email: "{'eindbaas@svsticky.nl'}",
+        address: "Drieharingstraat 22, 3511 BJ Utrecht",
         iban: "GB94BARC10201530093459",
         value: "20,20",
         what: "Graafmachine",

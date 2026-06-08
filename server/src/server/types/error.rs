@@ -15,6 +15,8 @@ pub enum Error {
     InvalidIban,
     #[error("Invalid Email address")]
     InvalidEmail,
+    #[error("Invalid Address")]
+    InvalidAddress,
     #[error("Missing attachments")]
     MissingAttachment,
     #[error("Value may not be negative or zero")]
@@ -40,6 +42,7 @@ impl ResponseError for Error {
             Self::TemplateRender(_) => StatusCode::INTERNAL_SERVER_ERROR,
             Self::InvalidIban => StatusCode::BAD_REQUEST,
             Self::InvalidEmail => StatusCode::BAD_REQUEST,
+            Self::InvalidAddress => StatusCode::BAD_REQUEST,
             Self::MissingAttachment => StatusCode::BAD_REQUEST,
             Self::ValueNegativeOrZero => StatusCode::BAD_REQUEST,
             Self::InvalidAttachmentBase64(_) => StatusCode::BAD_REQUEST,

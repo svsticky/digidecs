@@ -32,6 +32,7 @@ pub struct PendingDigidecsData {
     pub name: String,
     pub iban: String,
     pub email: String,
+    pub address: String,
     pub value: f64,
     pub what: String,
     pub commission: String,
