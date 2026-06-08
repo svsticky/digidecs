@@ -22,7 +22,7 @@
             v-model="form.name"
             color="primary"
             :label="$t('home.form.name')"
-            :hint="$t('home.form.hints.name')"
+            :placeholder="$t('home.form.hints.name')"
             :rules="rules.required"
           />
 
@@ -30,7 +30,7 @@
             v-model="form.iban"
             color="primary"
             :label="$t('home.form.iban')"
-            :hint="$t('home.form.hints.iban')"
+            :placeholder="$t('home.form.hints.iban')"
             :rules="rules.iban"
           />
 
@@ -38,7 +38,7 @@
             v-model="form.email"
             color="primary"
             :label="$t('home.form.email')"
-            :hint="$t('home.form.hints.email')"
+            :placeholder="$t('home.form.hints.email')"
             :rules="rules.email"
           />
 
@@ -54,7 +54,7 @@
             v-model="form.value"
             color="primary"
             :label="$t('home.form.value')"
-            :hint="$t('home.form.hints.value')"
+            :placeholder="$t('home.form.hints.value')"
             :rules="rules.value"
             prepend-icon="mdi-currency-eur"
           />
@@ -63,7 +63,7 @@
             v-model="form.what"
             color="primary"
             :label="$t('home.form.what')"
-            :hint="$t('home.form.hints.what')"
+            :placeholder="$t('home.form.hints.what')"
             :rules="rules.required"
           />
 
@@ -71,7 +71,7 @@
             v-model="form.commission"
             color="primary"
             :label="$t('home.form.commission')"
-            :hint="$t('home.form.hints.commission')"
+            :placeholder="$t('home.form.hints.commission')"
             :rules="rules.required"
           />
 
