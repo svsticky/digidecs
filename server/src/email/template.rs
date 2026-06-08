@@ -12,6 +12,7 @@ pub struct TreasurerData {
     pub name: String,
     pub iban: String,
     pub email: String,
+    pub address: String,
     pub value: String,
     pub what: String,
     pub commission: String,

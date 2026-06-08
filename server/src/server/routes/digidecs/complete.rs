@@ -45,6 +45,7 @@ pub async fn complete(
         name: digidecs.data.name.clone(),
         iban: digidecs.data.iban.clone(),
         email: digidecs.data.email.clone(),
+        address: digidecs.data.address.clone(),
         value: format!("{:.2}", digidecs.data.value),
         what: digidecs.data.what.clone(),
         commission: digidecs.data.commission.clone(),

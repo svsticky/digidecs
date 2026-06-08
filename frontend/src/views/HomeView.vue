@@ -43,6 +43,14 @@
           />
 
           <v-text-field
+            v-model="form.address"
+            color="primary"
+            :label="$t('home.form.address')"
+            :hint="$t('home.form.hints.address')"
+            :rules="rules.address"
+          />
+
+          <v-text-field
             v-model="form.value"
             color="primary"
             :label="$t('home.form.value')"
@@ -129,6 +137,7 @@ interface Data {
     name: string,
     iban: string,
     email: string,
+    address: string,
     value: string,
     what: string,
     commission: string,
@@ -140,6 +149,7 @@ interface Data {
     required: InputValidationRules,
     iban: InputValidationRules,
     email: InputValidationRules,
+    address: InputValidationRules,
     value: InputValidationRules,
     files: ((v: File[]) => string | boolean)[],
   }
@@ -186,6 +196,9 @@ export default defineComponent({
           v => !!v || this.$t("home.form.rules.required"),
           v => /[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]/.test(v) || this.$t("home.form.rules.emailInvalid")
         ],
+        address: [
+          v => !!v || this.$t("home.form.rules.required")
+        ],
         value: [
           v => !!v || this.$t("home.form.rules.required"),
           v => /^[+-]?([0-9]+([.|,][0-9]*)?|[.|,][0-9]+)$/.test(v) || this.$t("home.form.rules.valueInvalid"),
@@ -226,6 +239,7 @@ export default defineComponent({
         this.form.name,
         this.form.iban,
         this.form.email,
+        this.form.address,
         Number.parseFloat(this.form.value.replaceAll(",",".")),
         this.form.what,
         this.form.commission,
@@ -281,6 +295,7 @@ export default defineComponent({
         name: "",
         iban: "",
         email: "",
+        address: "",
         value: "",
         what: "",
         commission: "",

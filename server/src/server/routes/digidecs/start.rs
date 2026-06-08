@@ -19,6 +19,7 @@ pub struct StartDigidecsRequest {
     name: String,
     iban: String,
     email: String,
+    address: String,
     value: f64,
     what: String,
     commission: String,
@@ -98,6 +99,7 @@ pub async fn start(
         data: PendingDigidecsData {
             name: payload.name,
             email: payload.email,
+            address: payload.address,
             value: payload.value,
             iban: payload.iban,
             notes: payload.notes,
