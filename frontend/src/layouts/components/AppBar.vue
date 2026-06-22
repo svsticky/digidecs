@@ -4,7 +4,7 @@
     color="primary"
   >
     <v-app-bar-title>
-      <v-avatar>
+      <v-avatar color="transparent">
         <v-img
           src="https://public.svsticky.nl/logos/hoofd_outline_wit.svg"
           alt="sticky-logo"
